@@ -1,5 +1,6 @@
 package org.demo.db.user.management;
 
+import lombok.SneakyThrows;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,71 +16,72 @@ import java.util.stream.Collectors;
 @Service
 public class RepositoryUserDetailsManager implements UserDetailsManager {
 
-    private final LdapDemoUserRepository ldapDemoUserRepository;
-    private final LdapDemoRoleRepository ldapDemoRoleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public RepositoryUserDetailsManager(LdapDemoUserRepository ldapDemoUserRepository, LdapDemoRoleRepository ldapDemoRoleRepository) {
-        this.ldapDemoUserRepository = ldapDemoUserRepository;
-        this.ldapDemoRoleRepository = ldapDemoRoleRepository;
+    public RepositoryUserDetailsManager(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public LdapDemoUser mapToUser(UserDetails details) {
-        LdapDemoUser ldapDemoUser = new LdapDemoUser();
-        ldapDemoUser.setUsername(details.getUsername());
-        ldapDemoUser.setPassword(details.getPassword());
-        ldapDemoUser.setEnabled(details.isEnabled());
-        ldapDemoUser.setAccountNonExpired(details.isAccountNonExpired());
-        ldapDemoUser.setAccountNonLocked(details.isAccountNonLocked());
-        ldapDemoUser.setCredentialsNonExpired(details.isCredentialsNonExpired());
-        Set<LdapDemoRole> ldapDemoRoles = mapToRoles(details.getAuthorities());
-        ldapDemoUser.setAuthorities(ldapDemoRoles);
-        return ldapDemoUser;
+    public User mapToUser(UserDetails details) {
+        User user = new User();
+        user.setUsername(details.getUsername());
+        user.setPassword(details.getPassword());
+        user.setEnabled(details.isEnabled());
+        user.setAccountNonExpired(details.isAccountNonExpired());
+        user.setAccountNonLocked(details.isAccountNonLocked());
+        user.setCredentialsNonExpired(details.isCredentialsNonExpired());
+        Set<Role> roles = mapToRoles(details.getAuthorities());
+        user.setAuthorities(roles);
+        return user;
     }
 
     // set of persistent roles
-    private Set<LdapDemoRole> mapToRoles(Collection<? extends GrantedAuthority> authorities) {
+    private Set<Role> mapToRoles(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .map(this::saveOrUpdateRole)
                 .collect(Collectors.toSet());
     }
 
-    private LdapDemoRole saveOrUpdateRole(String authority) {
-        LdapDemoRole byAuthority = ldapDemoRoleRepository.findByAuthority(authority);
+    @SneakyThrows
+    private Role saveOrUpdateRole(String authority) {
+        Role byAuthority = roleRepository.findByAuthority(authority);
         if (byAuthority != null) {
             return byAuthority;
         } else {
-            LdapDemoRole ldapDemoRole = new LdapDemoRole();
-            ldapDemoRole.setAuthority(authority);
-            return ldapDemoRoleRepository.save(ldapDemoRole);
+            Role role = new Role();
+            role.setAuthority(authority);
+            return roleRepository.save(role);
         }
     }
 
     @Override
     public void createUser(UserDetails user) {
-        ldapDemoUserRepository.save(mapToUser(user));
+        userRepository.save(mapToUser(user));
     }
 
     @Override
     public void updateUser(UserDetails details) {
-        LdapDemoUser ldapDemoUser = ldapDemoUserRepository.findByUsername(details.getUsername());
-        if (ldapDemoUser == null) {
+        User user = userRepository.findByUsername(details.getUsername());
+        if (user == null) {
             throw new IllegalStateException();
         }
-        ldapDemoUser.setUsername(details.getUsername());
-        ldapDemoUser.setPassword(details.getPassword());
-        ldapDemoUser.setEnabled(details.isEnabled());
-        ldapDemoUser.setAccountNonExpired(details.isAccountNonExpired());
-        ldapDemoUser.setAccountNonLocked(details.isAccountNonLocked());
-        ldapDemoUser.setCredentialsNonExpired(details.isCredentialsNonExpired());
-        ldapDemoUser.setAuthorities(mapToRoles(details.getAuthorities()));
+        user.setUsername(details.getUsername());
+        user.setPassword(details.getPassword());
+        user.setEnabled(details.isEnabled());
+        user.setAccountNonExpired(details.isAccountNonExpired());
+        user.setAccountNonLocked(details.isAccountNonLocked());
+        user.setCredentialsNonExpired(details.isCredentialsNonExpired());
+        user.setAuthorities(mapToRoles(details.getAuthorities()));
     }
 
     @Override
     public void deleteUser(String username) {
-        LdapDemoUser byUsername = ldapDemoUserRepository.findByUsername(username);
+        User byUsername = userRepository.findByUsername(username);
         if (byUsername != null) {
-            ldapDemoUserRepository.delete(byUsername);
+            userRepository.delete(byUsername);
         }
     }
 
@@ -90,11 +92,11 @@ public class RepositoryUserDetailsManager implements UserDetailsManager {
 
     @Override
     public boolean userExists(String username) {
-        return ldapDemoUserRepository.existsByUsername(username);
+        return userRepository.existsByUsername(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return ldapDemoUserRepository.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 }

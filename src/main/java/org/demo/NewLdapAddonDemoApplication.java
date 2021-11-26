@@ -2,6 +2,7 @@ package org.demo;
 
 
 import com.amplicode.ldap.synchronization.LdapUsersSynchronizationManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,20 +15,14 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+@RequiredArgsConstructor
 @SpringBootApplication
 public class NewLdapAddonDemoApplication implements CommandLineRunner {
 
-    @Autowired
-    UserDetailsManager manager;
-
-    @Autowired
-    TransactionTemplate tt;
-
-    @Autowired
-    LdapUsersSynchronizationManager synchronizationManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    final UserDetailsManager manager;
+    final TransactionTemplate tt;
+    final LdapUsersSynchronizationManager synchronizationManager;
+    final PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(NewLdapAddonDemoApplication.class, args);
@@ -36,7 +31,7 @@ public class NewLdapAddonDemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 //        synchronizationManager.synchronizeUsers();
-        tt.execute(status -> {
+        tt.executeWithoutResult(status -> {
             if (!manager.userExists("admin")) {
                 manager.createUser(User.withUsername("admin")
                         .password(passwordEncoder.encode("admin"))
@@ -44,7 +39,6 @@ public class NewLdapAddonDemoApplication implements CommandLineRunner {
                         .build()
                 );
             }
-            return null;
         });
     }
 }
