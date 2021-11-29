@@ -1,5 +1,6 @@
 import { Home } from "./home/Home";
 import { ReactComponent } from "@amplicode/react-core";
+import LdapComponent from "./ldap/LdapComponent";
 
 export interface ScreenInfo {
   /**
@@ -17,12 +18,11 @@ export const screenRegistry: Record<string, ScreenInfo> = {
   home: {
     component: Home,
     captionKey: "screen.home"
+  },
+  'ldap-component': {
+    component: LdapComponent,
+    captionKey: "screen.Ldap"
   }
-  // TODO: delete me
-  // 'owner-list': {
-  //   component: OwnerList,
-  //   captionKey: 'screen.OwnerList',
-  // },
 };
 
 export function getScreenPaths(): string[] {

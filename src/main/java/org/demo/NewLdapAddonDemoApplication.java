@@ -25,6 +25,7 @@ public class NewLdapAddonDemoApplication implements CommandLineRunner {
     final PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
+        System.setProperty("user.timezone", "Asia/Kolkata");
         SpringApplication.run(NewLdapAddonDemoApplication.class, args);
     }
 

@@ -49,6 +49,9 @@ export const AppMenu = observer(() => {
       <Menu.Item icon={<HomeOutlined />} title={getCaption("home")} key="home">
         {getCaption("home")}
       </Menu.Item>
+        <Menu.Item title={getCaption("ldap-component")} key="ldap-component">
+            {getCaption("ldap-component")}
+        </Menu.Item>
       {/*If you don't need Screen API (tabs / breadcrumbs) you can just use React Router components*/}
       {/*<Menu.Item*/}
       {/*  title='Component1'*/}

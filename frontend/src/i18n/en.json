@@ -23,5 +23,6 @@
   "EntityDetailsScreen.validationError": "Validation Error. Please check the data you entered.",
   "EntityLookupField.selectEntityInstance": "Select entity instance",
 
-  "screen.home": "Home"
+  "screen.home": "Home",
+  "screen.Ldap": "LDAP"
 }

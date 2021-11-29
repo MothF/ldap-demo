@@ -5,11 +5,35 @@ schema {
     mutation: Mutation
 }
 
+type LdapLogEventDto {
+    date: OffsetDateTime!
+    id: Long!
+    level: LogLevel!
+    logger: String!
+    loggerSimpleName: String!
+    message: String!
+    thread: String!
+    throwableClass: String
+    throwableMessage: String
+}
+
 "Mutation root"
 type Mutation
 
 "Query root"
-type Query
+type Query {
+    ldapLogEventList: [LdapLogEventDto]
+}
+
+enum LogLevel {
+    DEBUG
+    ERROR
+    FATAL
+    INFO
+    OFF
+    TRACE
+    WARN
+}
 
 "BigDecimal"
 scalar BigDecimal
