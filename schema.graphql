@@ -17,12 +17,24 @@ type LdapLogEventDto {
     throwableMessage: String
 }
 
+type MatchingRuleDto {
+    description: String
+    entityAttribute: String!
+    id: Long!
+    ldapAttribute: String!
+}
+
 "Mutation root"
-type Mutation
+type Mutation {
+    deleteMatchingRule(id: Long!): Boolean!
+    updateMatchingRule(input: MatchingRuleDtoInput!): MatchingRuleDto
+}
 
 "Query root"
 type Query {
+    findMatchingRule(id: Long!): MatchingRuleDto
     ldapLogEventList: [LdapLogEventDto]
+    listMatchingRules: [MatchingRuleDto]
 }
 
 enum LogLevel {
@@ -82,3 +94,10 @@ scalar UUID
 
 "Void"
 scalar Void
+
+input MatchingRuleDtoInput {
+    description: String
+    entityAttribute: String!
+    id: Long!
+    ldapAttribute: String!
+}

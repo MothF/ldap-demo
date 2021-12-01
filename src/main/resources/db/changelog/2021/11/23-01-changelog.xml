@@ -37,6 +37,7 @@
             <column name="account_non_locked" type="BOOLEAN"/>
             <column name="credentials_non_expired" type="BOOLEAN"/>
             <column name="enabled" type="BOOLEAN"/>
+            <column name="email" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet id="1637672684460-5" author="admin (generated)">

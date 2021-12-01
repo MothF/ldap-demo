@@ -3,17 +3,22 @@ package org.demo;
 
 import com.amplicode.ldap.synchronization.LdapUsersSynchronizationManager;
 import lombok.RequiredArgsConstructor;
+import org.demo.db.user.management.Role;
+import org.demo.db.user.management.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.ClassUtils;
+
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @SpringBootApplication
@@ -34,11 +39,13 @@ public class NewLdapAddonDemoApplication implements CommandLineRunner {
 //        synchronizationManager.synchronizeUsers();
         tt.executeWithoutResult(status -> {
             if (!manager.userExists("admin")) {
-                manager.createUser(User.withUsername("admin")
-                        .password(passwordEncoder.encode("admin"))
-                        .authorities(new SimpleGrantedAuthority("ADMIN"))
-                        .build()
-                );
+                User user = new User();
+                user.setUsername("admin");
+                user.setPassword(passwordEncoder.encode("admin"));
+                Role role = new Role();
+                role.setAuthority("ADMIN");
+                user.setRoles(Collections.singleton(role));
+                manager.createUser(user);
             }
         });
     }

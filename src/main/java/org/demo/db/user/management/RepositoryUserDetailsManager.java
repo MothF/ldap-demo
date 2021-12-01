@@ -24,29 +24,8 @@ public class RepositoryUserDetailsManager implements UserDetailsManager {
         this.roleRepository = roleRepository;
     }
 
-    public User mapToUser(UserDetails details) {
-        User user = new User();
-        user.setUsername(details.getUsername());
-        user.setPassword(details.getPassword());
-        user.setEnabled(details.isEnabled());
-        user.setAccountNonExpired(details.isAccountNonExpired());
-        user.setAccountNonLocked(details.isAccountNonLocked());
-        user.setCredentialsNonExpired(details.isCredentialsNonExpired());
-        Set<Role> roles = mapToRoles(details.getAuthorities());
-        user.setAuthorities(roles);
-        return user;
-    }
-
-    // set of persistent roles
-    private Set<Role> mapToRoles(Collection<? extends GrantedAuthority> authorities) {
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(this::saveOrUpdateRole)
-                .collect(Collectors.toSet());
-    }
-
     @SneakyThrows
-    private Role saveOrUpdateRole(String authority) {
+    private Role createOrLoadRole(String authority) {
         Role byAuthority = roleRepository.findByAuthority(authority);
         if (byAuthority != null) {
             return byAuthority;
@@ -57,24 +36,36 @@ public class RepositoryUserDetailsManager implements UserDetailsManager {
         }
     }
 
+
     @Override
     public void createUser(UserDetails user) {
-        userRepository.save(mapToUser(user));
+        User cast = (User) user;
+        Set<Role> roles = loadAuthorities(user.getAuthorities());
+        roles.addAll(cast.getRoles());
+        cast.setRoles(roles);
+        userRepository.save((User) user);
+    }
+
+    private Set<Role> loadAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .map(this::createOrLoadRole)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public void updateUser(UserDetails details) {
         User user = userRepository.findByUsername(details.getUsername());
-        if (user == null) {
-            throw new IllegalStateException();
-        }
+        if (user == null) throw new IllegalStateException();
         user.setUsername(details.getUsername());
         user.setPassword(details.getPassword());
         user.setEnabled(details.isEnabled());
         user.setAccountNonExpired(details.isAccountNonExpired());
         user.setAccountNonLocked(details.isAccountNonLocked());
         user.setCredentialsNonExpired(details.isCredentialsNonExpired());
-        user.setAuthorities(mapToRoles(details.getAuthorities()));
+        user.setEmail(((User) details).getEmail());
+        user.addRoles(loadAuthorities(details.getAuthorities()));
+        userRepository.save(user);
     }
 
     @Override

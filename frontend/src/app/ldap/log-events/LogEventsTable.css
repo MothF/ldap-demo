@@ -2,3 +2,7 @@
     max-width: 100% !important;
     flex: 1 1 auto;
 }
+
+.exception-divider {
+    margin: 0 0 10px !important;
+}

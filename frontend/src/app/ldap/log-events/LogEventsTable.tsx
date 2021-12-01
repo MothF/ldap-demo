@@ -1,7 +1,7 @@
-import {gql, useLazyQuery, useQuery} from "@apollo/client";
-import {Result, Row, Spin, Table} from "antd";
+import {gql, useLazyQuery} from "@apollo/client";
+import {Col, Divider, Result, Row, Spin, Table} from "antd";
 import moment from "moment";
-import React, {ReactNode, useEffect, useMemo} from 'react';
+import React, {FunctionComponent, useEffect, useMemo} from 'react';
 import {FormattedMessage} from "react-intl";
 import {LdapLogEventDto} from "../../../gql/graphql";
 import './LogEventsTable.css';
@@ -35,10 +35,13 @@ export const LogEventsTable = () => {
         }
         fetchLogEvents(loading).catch((e) => {
             console.error(e);
-            error = e;
         });
     }, [loadLogEvents])
-
+    // <>
+    //     <b>{record.throwableClass}</b>
+    //     <span/>
+    //     <p>{record.throwableMessage}</p>
+    // </>/
 
     const tableData = useMemo(() => mapResponse(data), [data]);
 
@@ -50,24 +53,15 @@ export const LogEventsTable = () => {
                        className='log-events-table'
                        dataSource={tableData}
                        expandable={{
-                           expandedRowRender: (record: LdapLogEventDto) => {
-                               return (
-                                   <>
-                                       <b>{record.throwableClass}</b>
-                                       <span/>
-                                       <p>{record.throwableMessage}</p>
-                                   </>
-                               )
-                           },
-                           rowExpandable: (record: LdapLogEventDto) => !!record.throwableClass
+                           expandedRowRender: (record: LdapLogEventDto) => <ExceptionDescription logEvent={record}/>,
+                           rowExpandable: (record: LdapLogEventDto) => !!record.throwableClass &&
+                               !!record.throwableMessage
                        }}
                        loading={loading && {indicator: <Spin/>, size: 'large'}}>
                     <Column title='Level' dataIndex='level' key='level'/>
                     <Column title='Logger' dataIndex='loggerSimpleName' key='loggerSimpleName'/>
                     <Column title='Date' dataIndex='date' key='date'/>
                     <Column title='Thread' dataIndex='thread' key='thread'/>
-                    {/*<Column title='throwableClass' dataIndex='throwableClass' key='throwableClass'/>*/}
-                    {/*<Column title='throwableMessage' dataIndex='throwableMessage' key='throwableMessage'/>*/}
                     <Column title='message' dataIndex='message' key='message'/>
                 </Table>
             </Row>
@@ -83,4 +77,28 @@ function mapResponse(data: any): Array<LdapLogEventDto & { key: number }> {
             date: moment(item.date).format('YYYY-MM-DD HH:mm:ss')
         }
     }) ?? [];
+}
+
+const ExceptionDescription: FunctionComponent<{logEvent: LdapLogEventDto}> = ({logEvent}) => {
+    return (
+        <>
+            <Row>
+                <Col span={2}>
+                    <p>Exception:</p>
+                </Col>
+                <Col span={14}>
+                    <b>{logEvent.throwableClass}</b>
+                </Col>
+            </Row>
+            <Divider className='exception-divider'/>
+            <Row>
+                <Col span={2}>
+                    <p>Message:</p>
+                </Col>
+                <Col span={14}>
+                    <b>{logEvent.throwableMessage}</b>
+                </Col>
+            </Row>
+        </>
+    )
 }
