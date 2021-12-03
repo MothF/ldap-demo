@@ -1,17 +1,17 @@
-.form-row {
-    min-width: 100%;
-    justify-content: space-between;
-    padding-bottom: 10px;
-}
-
-.form-label-col {
+.settings-form-label-col {
     text-align: left;
     display: flex !important;
     flex-direction: column;
     justify-content: center;
 }
 
-.form-input-col {
-    max-width: 18%;
+.settings-form-input-col {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
     text-align: right;
+}
+
+.settings-form-input {
+    text-align: left;
 }

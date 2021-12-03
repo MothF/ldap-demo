@@ -10,9 +10,7 @@ const CONNECTION_SETTINGS = gql`
     query ConnectionSettings {
         connectionSettings {
             baseDn
-            ldapImplementation
             masterUserDn
-            standardAuthenticationUsers
             urls
         }
     }
@@ -54,25 +52,31 @@ const ConnectionSettings = () => {
         <>
             <Divider orientation="left">Connection Settings</Divider>
             <Form name='connection-settings'>
-                <Row gutter={24}>
-                    <Col span={3} className='form-label-col'>
+                <Row style={{margin: '5px 0'}}>
+                    <Col span={1} className='settings-form-label-col'>
                         Urls:
                     </Col>
-                    <Col span={4}>
-                        <Form.Item name='baseDn'>
-                            <Input disabled={true} defaultValue={connectionSettings.urls}/>
-                        </Form.Item>
+                    <Col span={6} className='settings-form-input-col'>
+                        <Input disabled={true} className='settings-form-input'
+                               defaultValue={connectionSettings.urls}/>
                     </Col>
                 </Row>
-
-                <Row>
-                    <Col span={3} className='form-label-col'>
-                        Base Domain Name:
+                <Row style={{margin: '5px 0'}}>
+                    <Col span={1} className='settings-form-label-col'>
+                        Base:
                     </Col>
-                    <Col span={4}>
-                        <Form.Item name='baseDn'>
-                            <Input disabled={true} defaultValue={connectionSettings.baseDn}/>
-                        </Form.Item>
+                    <Col span={6} className='settings-form-input-col'>
+                        <Input disabled={true} className='settings-form-input'
+                               defaultValue={connectionSettings.baseDn}/>
+                    </Col>
+                </Row>
+                <Row style={{margin: '5px 0'}}>
+                    <Col span={1} className='settings-form-label-col'>
+                        User:
+                    </Col>
+                    <Col span={6} className='settings-form-input-col'>
+                        <Input disabled={true} className='settings-form-input'
+                               defaultValue={connectionSettings.masterUserDn}/>
                     </Col>
                 </Row>
             </Form>
@@ -81,9 +85,7 @@ const ConnectionSettings = () => {
 }
 
 type ConnectionSettingsType = {
-    baseDn: string,
-    ldapImplementation: string,
-    masterUserDn: string,
-    standardAuthenticationUsers: string[],
-    urls: string[]
+    baseDn?: string,
+    masterUserDn?: string,
+    urls?: string[]
 }
