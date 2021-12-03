@@ -2,6 +2,7 @@ import {Tabs} from "antd";
 import {observer} from "mobx-react";
 import './LdapComponent.css';
 import {LogEventsTable} from "./log-events/LogEventsTable";
+import {SettingsForm} from "./settings/SettingsForm";
 
 const {TabPane} = Tabs;
 
@@ -10,12 +11,17 @@ const ROUTE = "entity-log";
 const TabItems = {
     logEvents: {
         key: 'log-events',
-        caption: 'LDAP Log'
+        caption: 'Log'
     } as TabInfo,
 
-    auditPolicy: {
-        key: 'audit-policy',
-        caption: 'Audit Policy'
+    matchingRules: {
+        key: 'matching-rules',
+        caption: 'Matching Rules'
+    } as TabInfo,
+
+    settings: {
+        key: 'settings',
+        caption: 'Settings'
     } as TabInfo
 }
 
@@ -27,7 +33,10 @@ const LdapComponent = observer(() => {
                 <TabPane tab={TabItems.logEvents.caption} key={TabItems.logEvents.key}>
                     <LogEventsTable/>
                 </TabPane>
-                <TabPane tab={TabItems.auditPolicy.caption} key={TabItems.auditPolicy.key}>
+                <TabPane tab={TabItems.matchingRules.caption} key={TabItems.matchingRules.key}>
+                </TabPane>
+                <TabPane tab={TabItems.settings.caption} key={TabItems.settings.key}>
+                    <SettingsForm/>
                 </TabPane>
             </Tabs>
         </div>

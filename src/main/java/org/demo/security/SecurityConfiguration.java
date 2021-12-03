@@ -26,8 +26,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/graphiql").permitAll()
                 .antMatchers("/graphql", "/graphql/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/greeting")
-                    .hasAnyAuthority("ADMIN", "MANAGERS")
+//                .antMatchers(HttpMethod.GET, "/synchronize")
+//                    .hasAnyAuthority("ADMIN", "MANAGERS")
             .and()
                 .httpBasic();
         //@formatter:on

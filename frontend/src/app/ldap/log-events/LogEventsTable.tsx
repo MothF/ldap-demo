@@ -1,7 +1,7 @@
 import {gql, useLazyQuery} from "@apollo/client";
 import {Col, Divider, Result, Row, Spin, Table} from "antd";
 import moment from "moment";
-import React, {FunctionComponent, useEffect, useMemo} from 'react';
+import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react';
 import {FormattedMessage} from "react-intl";
 import {LdapLogEventDto} from "../../../gql/graphql";
 import './LogEventsTable.css';
@@ -23,25 +23,25 @@ const LDAP_LOG_EVENT_LIST = gql`
 `
 
 export const LogEventsTable = () => {
-    let [loadLogEvents, {error, loading, data}] = useLazyQuery<[LdapLogEventDto]>(LDAP_LOG_EVENT_LIST, {
+    const [loadLogEvents, {error, loading, data}] = useLazyQuery<[LdapLogEventDto]>(LDAP_LOG_EVENT_LIST, {
         fetchPolicy: 'cache-and-network'
     });
 
+    const loadingRef = useRef(loading);
+
     useEffect(() => {
-        const fetchLogEvents = async (loading: boolean): Promise<void> => {
-          if (!loading) {
-              await loadLogEvents();
-          }
-        }
-        fetchLogEvents(loading).catch((e) => {
-            console.error(e);
+        const fetchLogEvents = async (): Promise<void> => {
+            if (!loadingRef.current) {
+                loadingRef.current = true;
+                await loadLogEvents();
+                loadingRef.current = false;
+            }
+        };
+
+        fetchLogEvents().catch(e => {
+            console.error(e)
         });
-    }, [loadLogEvents])
-    // <>
-    //     <b>{record.throwableClass}</b>
-    //     <span/>
-    //     <p>{record.throwableMessage}</p>
-    // </>/
+    }, [loadingRef, loadLogEvents])
 
     const tableData = useMemo(() => mapResponse(data), [data]);
 
@@ -79,7 +79,7 @@ function mapResponse(data: any): Array<LdapLogEventDto & { key: number }> {
     }) ?? [];
 }
 
-const ExceptionDescription: FunctionComponent<{logEvent: LdapLogEventDto}> = ({logEvent}) => {
+const ExceptionDescription: FunctionComponent<{ logEvent: LdapLogEventDto }> = ({logEvent}) => {
     return (
         <>
             <Row>

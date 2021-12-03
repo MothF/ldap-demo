@@ -1,0 +1,17 @@
+.form-row {
+    min-width: 100%;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.form-label-col {
+    text-align: left;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-input-col {
+    max-width: 18%;
+    text-align: right;
+}

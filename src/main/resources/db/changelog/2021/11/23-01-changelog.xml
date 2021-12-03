@@ -38,6 +38,7 @@
             <column name="credentials_non_expired" type="BOOLEAN"/>
             <column name="enabled" type="BOOLEAN"/>
             <column name="email" type="VARCHAR(255)"/>
+            <column name="phone" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet id="1637672684460-5" author="admin (generated)">
@@ -54,12 +55,12 @@
     <changeSet id="1637672684460-8" author="admin (generated)">
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles"
                                  constraintName="fk_userol_on_ldap_demo_role" referencedColumnNames="id"
-                                 referencedTableName="roles"/>
+                                 referencedTableName="roles" onDelete="CASCADE"/>
     </changeSet>
     <changeSet id="1637672684460-9" author="admin (generated)">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles"
                                  constraintName="fk_userol_on_ldap_demo_user" referencedColumnNames="id"
-                                 referencedTableName="users"/>
+                                 referencedTableName="users" onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

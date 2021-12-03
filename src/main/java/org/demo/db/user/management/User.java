@@ -54,6 +54,9 @@ public class User implements UserDetails, UserDetailsSetters {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "phone")
+    private String phone;
+
     @JoinTable(name = "USER_ROLES",
             joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))

@@ -5,12 +5,46 @@ schema {
     mutation: Mutation
 }
 
+"Mutation root"
+type Mutation {
+    updateLdapConfig(input: LdapConfigDtoInput!): LdapConfigDto!
+    deleteMatchingRule(id: Long!): Boolean!
+    updateMatchingRule(input: MatchingRuleDtoInput!): MatchingRuleDto
+}
+
+"Query root"
+type Query {
+    connectionSettings: ConnectionSettings!
+    ldapConfig: LdapConfigDto!
+    ldapLogEventList: [LdapLogEventDto!]!
+    findMatchingRule(id: Long!): MatchingRuleDto!
+    listMatchingRules: [MatchingRuleDto!]!
+}
+
+type ConnectionSettings {
+    baseDn: String!
+    ldapImplementation: String!
+    masterUserDn: String!
+    standardAuthenticationUsers: String!
+    urls: String!
+}
+
+type LdapConfigDto {
+    groupMemberAttribute: String!
+    groupNameAttribute: String!
+    groupSearchBase: String!
+    synchronizeFromGroups: [String]!
+    synchronizeOnLogin: Boolean!
+    userSearchBase: String!
+    usernameAttribute: String!
+}
+
 type LdapLogEventDto {
-    date: OffsetDateTime!
     id: Long!
-    level: LogLevel!
-    logger: String!
     loggerSimpleName: String!
+    level: LogLevel!
+    date: OffsetDateTime!
+    logger: String!
     message: String!
     thread: String!
     throwableClass: String
@@ -18,23 +52,27 @@ type LdapLogEventDto {
 }
 
 type MatchingRuleDto {
-    description: String
-    entityAttribute: String!
     id: Long!
+    entityAttribute: String!
     ldapAttribute: String!
+    description: String
 }
 
-"Mutation root"
-type Mutation {
-    deleteMatchingRule(id: Long!): Boolean!
-    updateMatchingRule(input: MatchingRuleDtoInput!): MatchingRuleDto
+input LdapConfigDtoInput {
+    groupMemberAttribute: String!
+    groupNameAttribute: String!
+    groupSearchBase: String!
+    synchronizeFromGroups: [String]!
+    synchronizeOnLogin: Boolean!
+    userSearchBase: String!
+    usernameAttribute: String!
 }
 
-"Query root"
-type Query {
-    findMatchingRule(id: Long!): MatchingRuleDto
-    ldapLogEventList: [LdapLogEventDto]
-    listMatchingRules: [MatchingRuleDto]
+input MatchingRuleDtoInput {
+    id: Long
+    entityAttribute: String!
+    ldapAttribute: String!
+    description: String
 }
 
 enum LogLevel {
@@ -94,10 +132,3 @@ scalar UUID
 
 "Void"
 scalar Void
-
-input MatchingRuleDtoInput {
-    description: String
-    entityAttribute: String!
-    id: Long!
-    ldapAttribute: String!
-}
