@@ -1,0 +1,9 @@
+.settings-form-input {
+    text-align: left;
+}
+
+.save-button,
+.discard-button {
+    width: 100px;
+    margin: 0 8px 0 0;
+}

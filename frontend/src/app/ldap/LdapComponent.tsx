@@ -2,7 +2,7 @@ import {Tabs} from "antd";
 import {observer} from "mobx-react";
 import './LdapComponent.css';
 import {LogEventsTable} from "./log-events/LogEventsTable";
-import {SettingsForm} from "./settings/SettingsForm";
+import {ConnectionSettingsForm} from "./settings/ConnectionSettingsForm";
 
 const {TabPane} = Tabs;
 
@@ -36,7 +36,7 @@ const LdapComponent = observer(() => {
                 <TabPane tab={TabItems.matchingRules.caption} key={TabItems.matchingRules.key}>
                 </TabPane>
                 <TabPane tab={TabItems.settings.caption} key={TabItems.settings.key}>
-                    <SettingsForm/>
+                    <ConnectionSettingsForm/>
                 </TabPane>
             </Tabs>
         </div>

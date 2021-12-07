@@ -1,5 +1,3 @@
-# This file was automatically generated. Do not edit manually.
-
 schema {
     query: Query
     mutation: Mutation
@@ -7,44 +5,32 @@ schema {
 
 "Mutation root"
 type Mutation {
-    updateLdapConfig(input: LdapConfigDtoInput!): LdapConfigDto!
     deleteMatchingRule(id: Long!): Boolean!
-    updateMatchingRule(input: MatchingRuleDtoInput!): MatchingRuleDto
+    updateConnectionSettings(connectionSettings: ConnectionSettingsDtoInput!): ConnectionSettingsDto!
+    updateMatchingRule(matchingRule: MatchingRuleDtoInput!): MatchingRuleDto!
 }
 
 "Query root"
 type Query {
-    connectionSettings: ConnectionSettings!
-    ldapConfig: LdapConfigDto!
-    ldapLogEventList: [LdapLogEventDto!]!
+    connectionSettings: ConnectionSettingsDto!
     findMatchingRule(id: Long!): MatchingRuleDto!
+    ldapLogEventList: [LdapLogEventDto!]!
     listMatchingRules: [MatchingRuleDto!]!
 }
 
-type ConnectionSettings {
+type ConnectionSettingsDto {
     baseDn: String!
-    ldapImplementation: String!
-    masterUserDn: String!
-    standardAuthenticationUsers: String!
-    urls: String!
-}
-
-type LdapConfigDto {
-    groupMemberAttribute: String!
-    groupNameAttribute: String!
-    groupSearchBase: String!
-    synchronizeFromGroups: [String]!
-    synchronizeOnLogin: Boolean!
-    userSearchBase: String!
-    usernameAttribute: String!
+    connectionDomainName: String!
+    connectionPassword: String!
+    urls: [String!]!
 }
 
 type LdapLogEventDto {
-    id: Long!
-    loggerSimpleName: String!
-    level: LogLevel!
     date: OffsetDateTime!
+    id: Long!
+    level: LogLevel!
     logger: String!
+    loggerSimpleName: String!
     message: String!
     thread: String!
     throwableClass: String
@@ -52,23 +38,6 @@ type LdapLogEventDto {
 }
 
 type MatchingRuleDto {
-    id: Long!
-    entityAttribute: String!
-    ldapAttribute: String!
-    description: String
-}
-
-input LdapConfigDtoInput {
-    groupMemberAttribute: String!
-    groupNameAttribute: String!
-    groupSearchBase: String!
-    synchronizeFromGroups: [String]!
-    synchronizeOnLogin: Boolean!
-    userSearchBase: String!
-    usernameAttribute: String!
-}
-
-input MatchingRuleDtoInput {
     id: Long
     entityAttribute: String!
     ldapAttribute: String!
@@ -83,6 +52,20 @@ enum LogLevel {
     OFF
     TRACE
     WARN
+}
+
+input ConnectionSettingsDtoInput {
+    baseDn: String!
+    connectionDomainName: String!
+    connectionPassword: String!
+    urls: [String!]!
+}
+
+input MatchingRuleDtoInput {
+    id: Long
+    entityAttribute: String!
+    ldapAttribute: String!
+    description: String
 }
 
 "BigDecimal"
