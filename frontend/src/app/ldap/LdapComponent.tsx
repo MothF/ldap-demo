@@ -2,11 +2,12 @@ import {Tabs} from "antd";
 import {observer} from "mobx-react";
 import './LdapComponent.css';
 import {LogEventsTable} from "./log-events/LogEventsTable";
+import MatchingRulesList from "./matching-rules/MatchingRulesList";
 import {ConnectionSettingsForm} from "./settings/ConnectionSettingsForm";
 
 const {TabPane} = Tabs;
 
-const ROUTE = "entity-log";
+const LDAP_COMPONENT_ROUTE = "ldap-component";
 
 const TabItems = {
     logEvents: {
@@ -34,6 +35,7 @@ const LdapComponent = observer(() => {
                     <LogEventsTable/>
                 </TabPane>
                 <TabPane tab={TabItems.matchingRules.caption} key={TabItems.matchingRules.key}>
+                    <MatchingRulesList/>
                 </TabPane>
                 <TabPane tab={TabItems.settings.caption} key={TabItems.settings.key}>
                     <ConnectionSettingsForm/>

@@ -72,7 +72,7 @@ export const ConnectionSettingsForm = () => {
                 description: `Something went wrong while updating connection settings,\n${updateErrors}`
             })
         }
-    }, []);
+    }, [updateConnectionSettings, convertFormData]);
 
     useEffect(() => fetchSettings(), [fetchSettings]);
 
@@ -119,17 +119,13 @@ const SettingsFormInput: FunctionComponent<{ label: string, name: string }> = ({
 
 function convertFormData(formData: any): ConnectionSettings {
     const {urls} = formData;
-    const toUpdate = {
+    const toUpdate: ConnectionSettings = {
         baseDn: formData.baseDn,
         connectionDomainName: formData.connectionDomainName,
         connectionPassword: formData.connectionPassword
-    } as ConnectionSettings;
-    if (typeof urls === 'string') {
-        toUpdate.urls = urls.split(',').map((url: string) => {
-            return url.trim();
-        });
-    } else {
-        toUpdate.urls = urls;
-    }
+    };
+    toUpdate.urls = typeof urls === 'string'
+        ? urls.split(',').map((url: string) => url.trim())
+        : urls;
     return toUpdate;
 }
