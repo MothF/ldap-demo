@@ -61,13 +61,13 @@ export const ConnectionSettingsForm = () => {
             updateErrors = updateErrors ? updateErrors + `\n${e}` : `${e}`;
         }
         if (!updateErrors) {
-            notification['success']({
+            notification.success({
                 message: 'Connection settings update',
                 duration: 1,
                 description: 'Connection settings were successfully updated'
             })
         } else {
-            notification['error']({
+            notification.error({
                 message: 'Connection settings update',
                 description: `Something went wrong while updating connection settings,\n${updateErrors}`
             })

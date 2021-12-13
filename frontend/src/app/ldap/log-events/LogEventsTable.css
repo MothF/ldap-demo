@@ -6,3 +6,8 @@
 .exception-divider {
     margin: 0 0 10px !important;
 }
+
+.export-button {
+    width: 150px;
+    margin-bottom: 10px;
+}

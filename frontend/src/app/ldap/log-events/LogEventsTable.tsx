@@ -1,5 +1,6 @@
+import {DownloadOutlined} from "@ant-design/icons";
 import {gql, useLazyQuery} from "@apollo/client";
-import {Col, Divider, Result, Row, Spin, Table} from "antd";
+import {Button, Col, Divider, notification, Result, Row, Spin, Table} from "antd";
 import moment from "moment";
 import React, {FunctionComponent, useEffect, useMemo, useRef} from 'react';
 import {FormattedMessage} from "react-intl";
@@ -48,6 +49,13 @@ export const LogEventsTable = () => {
     if (error) return <Result status="error" title={<FormattedMessage id="common.requestFailed"/>}/>;
     return (
         <>
+            <Button icon={<DownloadOutlined/>}
+                    type="primary"
+                    onClick={() => {
+                        downloadLogs();
+                    }}
+                    htmlType="submit"
+                    className='export-button'>Download XLS</Button>
             <Row>
                 <Table scroll={{x: 'max-content'}}
                        className='log-events-table'
@@ -101,4 +109,26 @@ const ExceptionDescription: FunctionComponent<{ logEvent: LdapLogEventDto }> = (
             </Row>
         </>
     )
+}
+
+function downloadLogs() {
+    fetch("/rest/ldap/log/xls", {
+        method: "GET"
+    }).then(response => {
+        if (response.ok) {
+            return response.blob();
+        }
+        throw new Error(response.statusText);
+    }).then(blob => {
+        const anchor: HTMLAnchorElement = document.createElement('a');
+        anchor.href = window.URL.createObjectURL(blob);
+        anchor.download = "LDAP Logs.xls";
+        anchor.click();
+    }).catch(e => {
+        console.error(e)
+        notification.error({
+            message: 'LDAP logs export',
+            description: `Something went wrong while preparing logs XLS to export ${e}`
+        })
+    });
 }
