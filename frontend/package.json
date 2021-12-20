@@ -1,12 +1,12 @@
 {
-  "name": "ldap-demo",
+  "name": "new-ldap-addon-demo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@amplicode/react-antd": "^0.1.0",
-    "@amplicode/react-core": "^0.1.0",
+    "@amplicode/react-antd": "^0.2.0",
+    "@amplicode/react-core": "^0.3.1",
     "@ant-design/icons": "^4.6.3",
-    "@apollo/client": "^3.4.8",
+    "@apollo/client": "~3.4.8",
     "@react-buddy/ide-toolbox": "^1.0.0",
     "@react-buddy/react-scripts": "^1.0.0",
     "@testing-library/jest-dom": "^5.14.1",
@@ -17,9 +17,9 @@
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.9",
+    "amplicode-ldap": "file:../../../Amplicode/amplicode-ldap/frontend/amplicode-ldap-0.1.1-snapshot.1.tgz",
     "antd": "^4.16.12",
     "axios": "^0.21.1",
-    "dayjs": "^1.10.7",
     "graphql": "^15.5.1",
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
@@ -61,8 +61,15 @@
   "proxy": "http://localhost:8080",
   "devDependencies": {
     "@amplicode/gql": "file:src/gql",
+    "@graphql-codegen/cli": "^2.2.0",
     "@graphql-codegen/gql-tag-operations-preset": "^1.1.7",
-    "@graphql-typed-document-node/core": "^3.1.1",
-    "@types/qs": "^6.9.7"
+    "@graphql-codegen/typescript": "^2.2.2",
+    "@types/qs": "^6.9.7",
+    "prettier": "^2.4.1"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!antd|@ant-design|@react-buddy|rc-.+?|@babel/runtime).+(js|jsx)$"
+    ]
   }
 }

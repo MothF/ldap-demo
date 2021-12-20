@@ -1,6 +1,6 @@
 {
-  "short_name": "ldap-demo",
-  "name": "Ldap Demo App",
+  "short_name": "new-ldap-addon-demo",
+  "name": "New-ldap-addon-demo Application",
   "icons": [
     {
       "src": "favicon.ico",

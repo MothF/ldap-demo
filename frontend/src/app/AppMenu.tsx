@@ -3,9 +3,9 @@ import { HomeOutlined } from "@ant-design/icons";
 import { useIntl } from "react-intl";
 import { useCallback } from "react";
 import { observer } from "mobx-react";
-import { screenRegistry } from "./screenRegistry";
 import { useLocation } from "react-router-dom";
-import { useScreens, getScreenKey } from "@amplicode/react-core";
+import { useScreens, getScreenKey, screenStore } from "@amplicode/react-core";
+import { AddonsMenu } from "@amplicode/react-antd";
 
 export const AppMenu = observer(() => {
   const intl = useIntl();
@@ -14,7 +14,7 @@ export const AppMenu = observer(() => {
 
   const handleClick = useCallback(
     ({ key }: { key: string }) => {
-      const menuItemInfo = screenRegistry[key];
+      const menuItemInfo = screenStore.screenRegistry[key];
       if (menuItemInfo == null) {
         // This might be a menu item that doesn't use Screen API
         return;
@@ -37,7 +37,9 @@ export const AppMenu = observer(() => {
 
   const getCaption = useCallback(
     (key: string) => {
-      return intl.formatMessage({ id: screenRegistry[key].captionKey });
+      return intl.formatMessage({
+        id: screenStore.screenRegistry[key].captionKey
+      });
     },
     [intl]
   );
@@ -49,9 +51,7 @@ export const AppMenu = observer(() => {
       <Menu.Item icon={<HomeOutlined />} title={getCaption("home")} key="home">
         {getCaption("home")}
       </Menu.Item>
-        <Menu.Item title={getCaption("ldap-component")} key="ldap-component">
-            {getCaption("ldap-component")}
-        </Menu.Item>
+      <AddonsMenu key={"addonsMenu"} />
       {/*If you don't need Screen API (tabs / breadcrumbs) you can just use React Router components*/}
       {/*<Menu.Item*/}
       {/*  title='Component1'*/}

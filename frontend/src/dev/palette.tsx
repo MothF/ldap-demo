@@ -14,31 +14,19 @@ import Button from "antd/es/button";
 import Sider from "antd/es/layout/Sider";
 import Col from "antd/es/grid/col";
 import Layout, { Content, Footer, Header } from "antd/es/layout/layout";
-import {
-  Affix,
-  Breadcrumb,
-  Cascader,
-  Divider,
-  Dropdown,
-  Input,
-  Menu,
-  Rate,
-  Row,
-  Space
-} from "antd";
+import { Affix, Cascader, Divider, Input, Rate, Row, Space } from "antd";
 import {
   AutoComplete,
   Card,
   DatePicker,
   InputNumber,
   Radio,
-  Select,
   Table
 } from "antd/es";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import { Group } from "antd/es/radio";
 
-export default () => (
+const palette = () => (
   <Palette>
     <Category name="Button">
       <Component name="Button">
@@ -410,7 +398,7 @@ export default () => (
               <a href="">Application Center</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">Application MatchingRulesList</a>
+              <a href="">Application List</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>An Application</Breadcrumb.Item>
           </Breadcrumb>
@@ -427,3 +415,5 @@ export default () => (
     </Category>
   </Palette>
 );
+
+export default palette;
