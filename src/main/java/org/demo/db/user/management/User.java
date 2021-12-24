@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
@@ -16,11 +17,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -65,6 +68,14 @@ public class User implements UserDetails, UserDetailsSetters {
 
     @Transient
     private Collection<? extends GrantedAuthority> grantedAuthorities = new LinkedHashSet<>();
+
+    @PostLoad
+    private void postLoad() {
+        this.grantedAuthorities = this.roles.stream()
+                .map(Role::getAuthority)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+    }
 
 
     public void addRoles(Collection<Role> roles) {

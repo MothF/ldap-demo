@@ -1,6 +1,7 @@
 package org.demo;
 
 
+import com.amplicode.ldap.security.LdapAuthorities;
 import com.amplicode.ldap.synchronization.LdapUsersSynchronizationManager;
 import lombok.RequiredArgsConstructor;
 import org.demo.db.user.management.Role;
@@ -10,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import org.springframework.util.ClassUtils;
 
 import java.util.Collections;
 
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @RequiredArgsConstructor
 @SpringBootApplication
 public class NewLdapAddonDemoApplication implements CommandLineRunner {
@@ -43,7 +46,7 @@ public class NewLdapAddonDemoApplication implements CommandLineRunner {
                 user.setUsername("admin");
                 user.setPassword(passwordEncoder.encode("admin"));
                 Role role = new Role();
-                role.setAuthority("ADMIN");
+                role.setAuthority(LdapAuthorities.ROLE_LDAP_MANAGER);
                 user.setRoles(Collections.singleton(role));
                 manager.createUser(user);
             }

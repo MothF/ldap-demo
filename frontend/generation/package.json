@@ -1,6 +1,6 @@
 {
   "name": "new-ldap-addon-demo-generation",
   "devDependencies": {
-    "@amplicode/codegen": "^0.5.3"
+    "@amplicode/codegen": "^0.6.2"
   }
 }

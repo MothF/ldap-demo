@@ -14,7 +14,6 @@ amplicode:
     urls: ldap://localhosts:10389 # todo
     master-user-dn: 'uid=admin,ou=system' # todo
     master-user-password: secret # todo
-    enable-ldap-auth: on
     standard-authentication-users: admin, system
     user-props:
       search-base: ou=users # delete
